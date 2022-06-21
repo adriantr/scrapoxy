@@ -35,7 +35,7 @@
     ],
     "dependencies": {
         "@google-cloud/compute": "^2.4.1",
-        "aws-sdk": "~2.171.0",
+        "aws-sdk": "~2.814.0",
         "bluebird": "~3.5.1",
         "body-parser": "~1.18.2",
         "commander": "~2.12.2",
@@ -43,11 +43,11 @@
         "cors": "~2.8.4",
         "express": "~4.16.2",
         "lodash": "^4.17.20",
-        "moment": "~2.19.4",
+        "moment": "~2.29.2",
         "morgan": "~1.9.0",
         "ovh": "~2.0.1",
         "request": "^2.88.2",
-        "socket.io": "~2.0.4",
+        "socket.io": "~3.0.0",
         "winston": "~2.4.0"
     },
     "devDependencies": {
