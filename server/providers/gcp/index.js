@@ -94,6 +94,10 @@ module.exports = class ProviderGCP {
     return 'STOPPED';
   }
 
+  static get ST_STAGING () {
+    return 'RUNNING';
+  }
+
   get region () {
     return this._config.region;
   }
@@ -198,7 +202,8 @@ module.exports = class ProviderGCP {
           case ProviderGCP.ST_PENDING: {
             return InstanceModel.STARTING;
           }
-          case ProviderGCP.ST_RUNNING: {
+          case ProviderGCP.ST_RUNNING:
+          case ProviderGCP.ST_STAGING: {
             return InstanceModel.STARTED;
           }
           case ProviderGCP.ST_STOPPED: {
