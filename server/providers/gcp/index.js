@@ -95,7 +95,7 @@ module.exports = class ProviderGCP {
   }
 
   static get ST_STAGING () {
-    return 'RUNNING';
+    return 'STAGING';
   }
 
   get region () {
