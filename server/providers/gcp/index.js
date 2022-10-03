@@ -263,9 +263,11 @@ module.exports = class ProviderGCP {
       return self.models.then((instances) => new Promise((resolve, reject) => {
         const vmPromises = [];
         const instanceCount = instances.length;
+        winston.debug('[ProviderGCP] Instance count: ', instanceCount);
         // const templateName = self._config.templateName;
-        _.times(cnt, (n) => {
-          vmPromises.push(_createVM(self._zone, `scraproxy-instance-${instanceCount + n}`, instanceConfig));
+        _.times(cnt, () => {
+          const randomString = Math.random().toString(36).substring(2, 7);
+          vmPromises.push(_createVM(self._zone, `scraproxy-${randomString}`, instanceConfig));
         });
 
         Promise.all(vmPromises).then((vms) => {
