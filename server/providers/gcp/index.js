@@ -70,39 +70,39 @@ module.exports = class ProviderGCP {
   //   doConfigure();
   // }
 
-  static get ST_PENDING () {
+  static get ST_PENDING() {
     return 'PROVISIONING';
   }
 
-  static get ST_RUNNING () {
+  static get ST_RUNNING() {
     return 'RUNNING';
   }
 
-  static get ST_SHUTTING_DOWN () {
+  static get ST_SHUTTING_DOWN() {
     return 'SUSPENDING';
   }
 
-  static get ST_TERMINATED () {
+  static get ST_TERMINATED() {
     return 'TERMINATED';
   }
 
-  static get ST_STOPPING () {
+  static get ST_STOPPING() {
     return 'STOPPING';
   }
 
-  static get ST_STOPPED () {
+  static get ST_STOPPED() {
     return 'STOPPED';
   }
 
-  static get ST_STAGING () {
+  static get ST_STAGING() {
     return 'STAGING';
   }
 
-  get region () {
+  get region() {
     return this._config.region;
   }
 
-  get models () {
+  get models() {
     const self = this;
 
     return describeInstances()
@@ -113,10 +113,10 @@ module.exports = class ProviderGCP {
 
     ////////////
 
-    function describeInstances () {
+    function describeInstances() {
       return new Promise((resolve, reject) => {
 
-        self._zone.getVMs({ autoPaginate: false }, (err, vms, apiResponse) => {
+        self._zone.getVMs({autoPaginate: false}, (err, vms, apiResponse) => {
           if (err) {
             return reject(err);
           }
@@ -126,7 +126,7 @@ module.exports = class ProviderGCP {
       });
     }
 
-    function summarizeInfo (instancesDesc) {
+    function summarizeInfo(instancesDesc) {
       const filtered = _.filter(instancesDesc, (vm) => !!vm.metadata.networkInterfaces[0].accessConfigs);
       return _.map(filtered, (instanceDesc) => {
         // winston.debug('[ProviderGCP] summarizeInfo:', instanceDesc);
@@ -142,7 +142,7 @@ module.exports = class ProviderGCP {
 
       ////////////
 
-      function getTag (instanceDesc) {
+      function getTag(instanceDesc) {
         if (!instanceDesc.metadata.tags) {
           return;
         }
@@ -151,7 +151,7 @@ module.exports = class ProviderGCP {
       }
     }
 
-    function excludeTerminated (instancesDesc) {
+    function excludeTerminated(instancesDesc) {
       return _.filter(
         instancesDesc,
         (instanceDesc) =>
@@ -160,7 +160,7 @@ module.exports = class ProviderGCP {
       );
     }
 
-    function excludeOutscope (instancesDesc) {
+    function excludeOutscope(instancesDesc) {
       return _.filter(
         instancesDesc,
         (instanceDesc) =>
@@ -168,7 +168,7 @@ module.exports = class ProviderGCP {
       );
     }
 
-    function convertToModel (instancesDesc) {
+    function convertToModel(instancesDesc) {
       winston.debug('[ProviderGCP] convertToModel:', instancesDesc.length);
       return _.map(
         instancesDesc,
@@ -186,7 +186,7 @@ module.exports = class ProviderGCP {
 
       ////////////
 
-      function buildAddress (ip) {
+      function buildAddress(ip) {
         if (!ip) {
           return;
         }
@@ -197,7 +197,7 @@ module.exports = class ProviderGCP {
         };
       }
 
-      function convertStatus (status) {
+      function convertStatus(status) {
         switch (status.toUpperCase()) {
           case ProviderGCP.ST_PENDING: {
             return InstanceModel.STARTING;
@@ -222,7 +222,7 @@ module.exports = class ProviderGCP {
     }
   }
 
-  createInstances (count) {
+  createInstances(count) {
     const self = this;
 
     winston.debug('[ProviderGCP] createInstances: count=%d', count);
@@ -239,7 +239,7 @@ module.exports = class ProviderGCP {
       });
 
 
-    async function _createVM (zone, vmName, config) {
+    async function _createVM(zone, vmName, config) {
       const [vm, operation] = await zone.createVM(vmName, config);
       winston.debug('[ProviderGCP] createInstances: new VM', vm.name);
       await operation.promise();
@@ -258,7 +258,7 @@ module.exports = class ProviderGCP {
     //     data: body,
     //   });
     // }
-    function createInstances (instanceConfig, cnt) {
+    function createInstances(instanceConfig, cnt) {
 
       return self.models.then((instances) => new Promise((resolve, reject) => {
         const vmPromises = [];
@@ -278,7 +278,7 @@ module.exports = class ProviderGCP {
       }));
     }
 
-    function tagInstances (zone, ids, tag) {
+    function tagInstances(zone, ids, tag) {
       Promise.map(ids, (id) => new Promise((resolve, reject) => {
         winston.debug('[ProviderGCP] tagInstances: id:', id, tag);
         zone.vm(id).getTags()
@@ -294,7 +294,7 @@ module.exports = class ProviderGCP {
     }
   }
 
-  startInstance (model) {
+  startInstance(model) {
     winston.debug('[ProviderGCP] startInstance: model=', model.toString());
 
     return new Promise((resolve, reject) => {
@@ -306,7 +306,7 @@ module.exports = class ProviderGCP {
     });
   }
 
-  removeInstance (model) {
+  removeInstance(model) {
     winston.debug(
       '[ProviderGCP] removeInstance (asked): model=',
       model.toString()
@@ -317,7 +317,7 @@ module.exports = class ProviderGCP {
     return Promise.resolve();
   }
 
-  _removeInstances (models) {
+  _removeInstances(models) {
     const ids = models.map((model) => model.providerOpts.id),
       names = models.map((model) => model.toString()).join(',');
 
