@@ -126,7 +126,7 @@ module.exports = class Instance extends EventEmitter {
 
         ////////////
 
-        function autorestart () {
+        function autorestart() {
             winston.debug('[Instance/%s] autorestart', self._model.name);
 
             if (self._model.status === InstanceModel.STARTED) {
@@ -151,16 +151,16 @@ module.exports = class Instance extends EventEmitter {
     }
 
 
-    get name () {
+    get name() {
         return this._model.name;
     }
 
 
-    get model () {
+    get model() {
         return this._model;
     }
 
-    set model (model) {
+    set model(model) {
         const oldstatus = this._model ? this._model.status : void 0;
 
         this._model = model;
@@ -171,7 +171,7 @@ module.exports = class Instance extends EventEmitter {
     }
 
 
-    get proxyParameters () {
+    get proxyParameters() {
         const address = this._model.address;
 
         return {
@@ -183,7 +183,7 @@ module.exports = class Instance extends EventEmitter {
     }
 
 
-    get stats () {
+    get stats() {
         return _.merge({}, this._model.stats, {
             alive: this._alive,
             useragent: this._useragent,
@@ -191,19 +191,19 @@ module.exports = class Instance extends EventEmitter {
     }
 
 
-    get removing () {
+    get removing() {
         return this._removing;
     }
 
 
-    removedFromManager () {
+    removedFromManager() {
         this._model.status = InstanceModel.REMOVED;
 
         this.emit('status:updated', InstanceModel.REMOVED, this._model.status);
     }
 
 
-    remove () {
+    remove() {
         this._removing = true;
         this._changeAlive(false);
 
@@ -211,7 +211,7 @@ module.exports = class Instance extends EventEmitter {
     }
 
 
-    updateRequestHeaders (headers) {
+    updateRequestHeaders(headers) {
         headers['user-agent'] = this._useragent;
 
         if (this._config.addProxyNameInRequest) {
@@ -223,22 +223,22 @@ module.exports = class Instance extends EventEmitter {
     }
 
 
-    updateResponseHeaders (headers) {
+    updateResponseHeaders(headers) {
         headers['x-cache-proxyname'] = this.name;
     }
 
 
-    incrRequest () {
+    incrRequest() {
         ++this._rqCount;
     }
 
 
-    toString () {
+    toString() {
         return this._model.toString();
     }
 
 
-    _changeAlive (alive) {
+    _changeAlive(alive) {
         winston.debug('[Instance/%s] changeAlive: %s => %s', this._model.name, this._alive, alive);
 
         if (this._alive !== alive) {
@@ -252,6 +252,6 @@ module.exports = class Instance extends EventEmitter {
 
 ////////////
 
-function getRandomDelay (min, max) {
+function getRandomDelay(min, max) {
     return Math.floor(min + Math.random() * (max - min));
 }
